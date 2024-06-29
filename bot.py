@@ -26,10 +26,10 @@ MIDTRANS_SERVER_KEY = 'Mid-server-tOgLcriijkzlz9WShqtW7yOS'
 bot.session = session
 
 harga_produk = {
-    "Nokwa": 100,
-    "Noktel": 100,
-    "Nokos_Ewallet": 100,
-    "Nokos_Apk": 100
+    "Nokwa": 5000,
+    "Noktel": 5000,
+    "Nokos_Ewallet": 3000,
+    "Nokos_Apk": 2000
 }
 
 user_orders = {}
@@ -144,10 +144,14 @@ def callback_inline(call: CallbackQuery):
         if stok[product] > 0:
             user_orders[chat_id] = {"products": product, "price": harga_produk[product]}
             markup, teks = jumlah_order(1)
+            bot.send_chat_action(chat_id, 'typing')
+            time.sleep(1)
             bot.edit_message_text(teks, chat_id, message_id, reply_markup=markup)
         else:
             markup = InlineKeyboardMarkup()
             markup.add(InlineKeyboardButton('Back to menu', callback_data='back'))
+            bot.send_chat_action(chat_id, 'typing')
+            time.sleep(1)
             bot.edit_message_text(f'Maaf, stok {product} habis. Silakan pilih produk lain.', chat_id, message_id, reply_markup=markup)
     
     elif action == "increase":
@@ -173,7 +177,8 @@ def callback_inline(call: CallbackQuery):
           InlineKeyboardButton("Bayar", url=payment_link),
           InlineKeyboardButton("Cancel", callback_data="cancel"),
         )
-        
+        bot.send_chat_action(chat_id, 'typing')
+        time.sleep(1)
         bot.edit_message_text(f"Kamu memesan {count} {product.replace('_',' ')} dengan total harga {total_price}.", chat_id, message_id, reply_markup=markup)
         
         teks = f"Detail Pesanan!\n\nStatus: UNPAID\nUsername : @{username}\nProduk: {product.replace('_',' ')}\nJumlah: {count}\nTotal: {total_price}\nPayment url: {payment_link}"
@@ -184,6 +189,8 @@ def callback_inline(call: CallbackQuery):
     
     elif call.data in ['cancel','back']:
       markup, teks = main_menu(chat_id, username)
+      bot.send_chat_action(chat_id, 'typing')
+      time.sleep(1)
       bot.edit_message_text(teks, chat_id, message_id, reply_markup=markup, parse_mode='Markdown')
     
     elif 'cek_stok' in call.data:
@@ -201,6 +208,8 @@ def callback_inline(call: CallbackQuery):
       
       #print(data_stok)
       s = '\n'.join(data_stok)
+      bot.send_chat_action(chat_id, 'typing')
+      time.sleep(1)
       bot.edit_message_text(s, chat_id, message_id, reply_markup=markup)
       data_stok.clear()
       
@@ -213,6 +222,8 @@ def check_payment_status(chat_id, payment_link, username, product, count, total_
   )
   if check_url(payment_link):
     teks = f"Detail Pesanan!\n\nStatus: PAID\nUsername : @{username}\nProduk: {product}\nJumlah: {count}\nTotal: {total_price}\nPayment url: {payment_link}"
+    bot.send_chat_action(chat_id, 'typing')
+    time.sleep(1)
     bot.edit_message_text(f'Hai *@{username}*, Pembayaran Telah Selesai!', chat_id, message_id, parse_mode='Markdown', reply_markup=markup)
     bot.send_message('-4227551363', teks)
     user_states[chat_id] = "SELECT_OPTION"
