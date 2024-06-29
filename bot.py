@@ -11,7 +11,9 @@ from requests.packages.urllib3.util.retry import Retry
 from datetime import datetime
 from threading import Thread
 from check_pay import check_url
-#from button import generate_markup
+from keep_alive import keep_alive
+
+keep_alive()
 
 session = requests.Session()
 retry = Retry(connect=3, backoff_factor=0.5)
