@@ -19,7 +19,7 @@ adapter = HTTPAdapter(max_retries=retry)
 session.mount('http://', adapter)
 session.mount('https://', adapter)
 
-bot = telebot.TeleBot('7347862137:AAFergERaS22NsSuthowthmdchYE86yuyT0')
+bot = telebot.TeleBot('8176678057:AAGiu5-WP0HmsgYiLzCDHaiwBus9PTt-BAk')
 MIDTRANS_SERVER_KEY = 'Mid-server-tOgLcriijkzlz9WShqtW7yOS'
 bot.session = session
 
@@ -186,7 +186,7 @@ def callback_inline(call: CallbackQuery):
           bot.edit_message_text(f"Kamu memesan {count} {product.replace('_',' ')} dengan total harga {total_price}.", chat_id, message_id, reply_markup=markup)
         
           teks = f"Detail Pesanan!\n\nStatus: UNPAID\nUsername : @{username}\nProduk: {product.replace('_',' ')}\nJumlah: {count}\nTotal: {total_price}\nPayment url: {payment_link}"
-          bot.send_message('-4227551363', teks)
+          bot.send_message('-1002285701878', teks)
           user_states[chat_id] = "WAIT_PAYMENT"
         
           Thread(target=check_payment_status, args=(chat_id, payment_link, username, product.replace(' ','_'), count, total_price, message_id)).start()
@@ -221,7 +221,7 @@ def check_payment_status(chat_id, payment_link, username, product, count, total_
   stok = load_stok()
   markup = InlineKeyboardMarkup(row_width=4)
   markup.add(
-    InlineKeyboardButton("Get Number", url='t.me/fafadstore'),
+    InlineKeyboardButton("Get Number", url='t.me/zuransstore'),
     InlineKeyboardButton("Back to menu", callback_data="back"),
   )
   if check_url(payment_link):
